@@ -22,7 +22,9 @@ class OrbitControls extends EventDispatcher {
   constructor(camera, domElement) {
     super();
 
+    // eslint-disable-next-line no-console
     if (domElement === undefined) console.warn('THREE.OrbitControls: The second parameter "domElement" is now mandatory.');
+    // eslint-disable-next-line no-console
     if (domElement === document) console.error('THREE.OrbitControls: "document" should not be used as the target "domElement". Please use "renderer.domElement" instead.');
 
     this.camera = camera;
@@ -252,6 +254,7 @@ class OrbitControls extends EventDispatcher {
       switch (event.pointerType) {
         case 'mouse':
         case 'pen':
+          // eslint-disable-next-line no-use-before-define
           onMouseUp(event);
           break;
         default:
