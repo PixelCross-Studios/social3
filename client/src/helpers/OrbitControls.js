@@ -14,13 +14,6 @@ import {
 //
 //    Orbit - left mouse / touch: one-finger move
 
-const TOUCH = {
-  ROTATE: 0,
-  PAN: 1,
-  DOLLY_PAN: 2,
-  DOLLY_ROTATE: 3
-};
-
 const _changeEvent = { type: 'change' };
 const _startEvent = { type: 'start' };
 const _endEvent = { type: 'end' };
@@ -43,22 +36,23 @@ class OrbitControls extends EventDispatcher {
 
     // How far you can orbit vertically, upper and lower limits.
     // Range is 0 to Math.PI radians.
-    this.minPolarAngle = 0; // radians
-    this.maxPolarAngle = Math.PI; // radians
+    this.minPolarAngle = Math.PI / 2 - Math.PI * 0.3; // radians
+    this.maxPolarAngle = Math.PI / 2 + Math.PI * 0.3; // radians
 
     // How far you can orbit horizontally, upper and lower limits.
     // If set, the interval [ min, max ] must be a sub-interval of [ - 2 PI, 2 PI ], with ( max - min < 2 PI )
-    this.minAzimuthAngle = -Infinity; // radians
-    this.maxAzimuthAngle = Infinity; // radians
+    this.minAzimuthAngle = -1; // radians
+    this.maxAzimuthAngle = 1; // radians
 
     // Set to true to enable damping (inertia)
     // If damping is enabled, you must call controls.update() in your animation loop
     this.enableDamping = false;
-    this.dampingFactor = 0.05;
+    this.dampingFactor = 0.3;
 
     // Set to false to disable rotating
     this.enableRotate = true;
     this.rotateSpeed = 1.0;
+    this.keyRotateSpeed = 1.0;
 
     // The four arrow keys
     this.keys = {
@@ -66,7 +60,7 @@ class OrbitControls extends EventDispatcher {
     };
 
     // Touch fingers
-    this.touches = { ONE: TOUCH.ROTATE };
+    this.touches = { ONE: 0 };
 
     // for reset
     this.target0 = this.target.clone();
@@ -141,27 +135,40 @@ class OrbitControls extends EventDispatcher {
 
     }
 
-    // TODO update keys to function on rotation
+    function handleKeyRotate(x, y) {
+      rotateDelta.set(x, y).multiplyScalar(scope.keyRotateSpeed);
+
+      rotateEnd.addVectors(rotateStart, rotateDelta);
+
+      const element = scope.domElement;
+
+      rotateLeft((2 * Math.PI * rotateDelta.x) / element.clientHeight); // yes, height
+
+      rotateUp((2 * Math.PI * rotateDelta.y) / element.clientHeight);
+
+      rotateStart.copy(rotateEnd);
+    }
+
     function handleKeyDown(event) {
       let needsUpdate = false;
       switch (event.code) {
         case scope.keys.UP:
-          // pan(0, scope.keyPanSpeed);
+          handleKeyRotate(0, 1);
           needsUpdate = true;
           break;
 
         case scope.keys.BOTTOM:
-          // pan(0, - scope.keyPanSpeed);
+          handleKeyRotate(0, -1);
           needsUpdate = true;
           break;
 
         case scope.keys.LEFT:
-          // pan(scope.keyPanSpeed, 0);
+          handleKeyRotate(1, 0);
           needsUpdate = true;
           break;
 
         case scope.keys.RIGHT:
-          // pan(- scope.keyPanSpeed, 0);
+          handleKeyRotate(-1, 0);
           needsUpdate = true;
           break;
 
@@ -218,14 +225,51 @@ class OrbitControls extends EventDispatcher {
     // event handlers - FSM: listen for events and reset state
     //
 
+    function onMouseMove(event) {
+      if (scope.enabled === false) return;
+
+      event.preventDefault();
+
+      if (state === STATE.ROTATE && scope.enableRotate === true) {
+        handleMouseMoveRotate(event);
+      }
+    }
+
+    function onPointerMove(event) {
+      if (scope.enabled === false) return;
+
+      switch (event.pointerType) {
+        case 'mouse':
+        case 'pen':
+          onMouseMove(event);
+          break;
+        default:
+        // TODO touch
+      }
+    }
+
+    function onPointerUp(event) {
+      switch (event.pointerType) {
+        case 'mouse':
+        case 'pen':
+          onMouseUp(event);
+          break;
+        default:
+        // TODO touch
+      }
+    }
+
     function onMouseDown(event) {
       // Prevent the browser from scrolling.
       event.preventDefault();
 
       // Manually set the focus since calling preventDefault above
       // prevents the browser from setting it automatically.
-
-      scope.domElement.focus ? scope.domElement.focus() : window.focus();
+      if (scope.domElement.focus) {
+        scope.domElement.focus();
+      } else {
+        window.focus();
+      }
 
       if (event.button === 0) {
         if (scope.enableRotate === false) return;
@@ -242,18 +286,6 @@ class OrbitControls extends EventDispatcher {
         scope.domElement.ownerDocument.addEventListener('pointerup', onPointerUp);
 
         scope.dispatchEvent(_startEvent);
-      }
-    }
-
-    function onMouseMove(event) {
-      if (scope.enabled === false) return;
-
-      event.preventDefault();
-
-      if (state = STATE.ROTATE) {
-        if (scope.enableRotate === false) return;
-
-        handleMouseMoveRotate(event);
       }
     }
 
@@ -289,36 +321,12 @@ class OrbitControls extends EventDispatcher {
       }
     }
 
-    function onPointerMove(event) {
-      if (scope.enabled === false) return;
-
-      switch (event.pointerType) {
-        case 'mouse':
-        case 'pen':
-          onMouseMove(event);
-          break;
-        default:
-        // TODO touch
-      }
-    }
-
-    function onPointerUp(event) {
-      switch (event.pointerType) {
-        case 'mouse':
-        case 'pen':
-          onMouseUp(event);
-          break;
-        default:
-        // TODO touch
-      }
-    }
-
     function onTouchStart(event) {
       if (scope.enabled === false) return;
 
       event.preventDefault(); // prevent scrolling
 
-      if (event.touches.length === 1 && scope.touches.ONE === TOUCH.ROTATE) {
+      if (event.touches.length === 1 && scope.touches.ONE === 0) {
         if (scope.enableRotate === false) return;
 
         handleTouchStartRotate(event);
@@ -360,9 +368,9 @@ class OrbitControls extends EventDispatcher {
     }
 
     function onContextMenu(event) {
-      if (scope.enabled === false) return;
-
-      event.preventDefault();
+      if (scope.enabled === true) {
+        event.preventDefault();
+      }
     }
 
     //
@@ -398,7 +406,7 @@ class OrbitControls extends EventDispatcher {
     };
 
     // this method is exposed, but perhaps it would be better if we can make it private...
-    this.update = () => {
+    this.update = (() => {
       const offset = new Vector3();
 
       // so camera.up is the orbit axis
@@ -494,8 +502,7 @@ class OrbitControls extends EventDispatcher {
 
         return false;
       };
-    };
-    this.update();
+    })();
 
     this.dispose = () => {
       scope.domElement.removeEventListener('contextmenu', onContextMenu);
