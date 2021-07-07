@@ -17,7 +17,7 @@ export default function Navigation() {
           backgroundColor: 'navy', height: 80, padding: 10, margin: 0
         }}
       >
-        <Typography variant="h3" style={{ color: 'white' }}>Logo</Typography>
+        <Typography variant="h3" style={{ color: 'white' }}>SOCIAL 3</Typography>
         <Grid item>
           <Grid container direction="row" alignItems="center">
             <TextField style={{ color: 'white' }} />
