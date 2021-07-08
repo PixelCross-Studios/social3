@@ -8,7 +8,7 @@ import ArtSection from './ArtSection.jsx';
 export default function Home({ images }) {
   return (
     <Container className="qaContainer" style={{ margin: '10px 0px 10px 0px', padding: 3, border: '1px solid #ddd' }}>
-      <ArtSection imageUrl={images[0]} />
+      { images.length > 0 ? <ArtSection imageUrl={images[0].url} /> : null }
     </Container>
   );
 }
