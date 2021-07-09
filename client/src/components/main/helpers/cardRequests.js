@@ -1,0 +1,11 @@
+import axios from 'axios';
+
+export function createCard(body) {
+  return axios.post('/api/cards', body)
+    .then((response) => response.data);
+}
+
+export function createComment(body, cardId) {
+  return axios.get(`/api/cards/${cardId}/comments`, body)
+    .then((response) => response.data);
+}
