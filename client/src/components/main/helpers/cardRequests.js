@@ -6,6 +6,6 @@ export function createCard(body) {
 }
 
 export function createComment(body, cardId) {
-  return axios.get(`/api/cards/${cardId}/comments`, body)
+  return axios.post(`/api/cards/${cardId}/comments`, body)
     .then((response) => response.data);
 }
