@@ -57,5 +57,13 @@ export default makeStyles(() => ({
   },
   answerBody: {
     whiteSpace: 'pre-line'
+  },
+  likeButton: {
+    minWidth: 'auto',
+    padding: 0
+  },
+  username: {
+    fontWeight: 1000,
+    fontSize: '1.5em'
   }
 }));

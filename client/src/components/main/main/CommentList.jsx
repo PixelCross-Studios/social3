@@ -27,7 +27,7 @@ export default function CommentList({ cardId, comments }) {
   }, [displayCount]);
 
   return (
-    <Container justify="flex-start" style={{ padding: 3, border: '1px solid #ddd' }}>
+    <Container justify="flex-start" style={{ padding: 3, border: '1px solid #555' }}>
       <Grid container direction="row" alignItems="center" justify="space-between">
         <Typography variant="h6">{comments.length > 0 ? 'Comments' : 'No comments yet'}</Typography>
         <CommentDialog cardId={cardId} />

@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable no-console */
 const express = require('express');
 const Card = require('../database/models/card');
@@ -32,6 +33,19 @@ router.post('/:cardId/comments', (req, res) => {
 
   query.then((card) => {
     card.comments.push(req.body);
+    return card.save();
+  })
+    .then((card) => {
+      res.status(200).send(card);
+    })
+    .catch((err) => console.log(err));
+});
+
+router.put('/:cardId', (req, res) => {
+  const query = Card.findById(req.params.cardId).exec();
+
+  query.then((card) => {
+    card.rating += Number(req.body.value);
     return card.save();
   })
     .then((card) => {

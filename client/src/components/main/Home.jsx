@@ -8,7 +8,7 @@ import CardDialog from './modals/CardDialog.jsx';
 
 export default function Home({ cards }) {
   return (
-    <Container className="qaContainer" style={{ margin: '10px 0px 10px 0px', padding: 6, border: '1px solid #ddd' }}>
+    <Container className="qaContainer" style={{ margin: '10px 0px 10px 0px', padding: 6 }}>
       <CardDialog />
       {/* eslint-disable-next-line no-underscore-dangle */}
       { cards.map((card) => <Card key={card._id} card={card} />) }

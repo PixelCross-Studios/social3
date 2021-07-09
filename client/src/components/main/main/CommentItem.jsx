@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import {
-  Container, Typography
+  Container, Typography, Grid
 } from '@material-ui/core';
 
 import useStyles from '../styles';
@@ -23,14 +23,15 @@ export default function CommentItem({ comment }) {
   }
 
   return (
-    <Container style={{ padding: 0 }}>
-      <Typography className="text">{comment.body}</Typography>
-      <Typography
-        className={classes.commentInfo}
-        variant="body2"
-      >
-        {`by ${comment.username}, ${formatDate(new Date(comment.createdAt))}`}
-      </Typography>
+    <Container style={{ padding: 0, margin: '10px 0px' }}>
+      <Grid container direction="column" justify="space-between">
+        <Grid item>
+          <Typography className="text">{comment.body}</Typography>
+          <Typography className={classes.commentInfo} variant="body2">
+            {`by ${comment.username}, ${formatDate(new Date(comment.createdAt))}`}
+          </Typography>
+        </Grid>
+      </Grid>
     </Container>
   );
 }
