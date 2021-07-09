@@ -1,28 +1,35 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Container from '@material-ui/core/Container';
+import { Container } from '@material-ui/core';
 
-import ArtSection from './ArtSection.jsx';
+import Card from './main/Card.jsx';
+import CardDialog from './modals/CardDialog.jsx';
 
-export default function Home({ images }) {
+export default function Home({ cards }) {
   return (
-    <Container className="qaContainer" style={{ margin: '10px 0px 10px 0px', padding: 3, border: '1px solid #ddd' }}>
-      { images.length > 0 ? <ArtSection imageUrl={images[0].url} /> : null }
+    <Container className="qaContainer" style={{ margin: '10px 0px 10px 0px', padding: 6, border: '1px solid #ddd' }}>
+      <CardDialog />
+      {/* eslint-disable-next-line no-underscore-dangle */}
+      { cards.map((card) => <Card key={card._id} card={card} />) }
     </Container>
   );
 }
 
 Home.propTypes = {
-  images: PropTypes.arrayOf(PropTypes.shape({
+  cards: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number,
-    url: PropTypes.string
+    image: PropTypes.string,
+    description: PropTypes.string,
+    username: PropTypes.string
   }))
 };
 
 Home.defaultProps = {
-  images: [{
+  cards: [{
     id: 0,
-    url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/7.png'
+    image: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/7.png',
+    description: 'Squirtle Placeholder',
+    username: 'Username Placeholder'
   }]
 };

@@ -6,16 +6,16 @@ import Container from '@material-ui/core/Container';
 import Navigation from './components/Navigation.jsx';
 import Home from './components/main/Home.jsx';
 
-import { getImages } from './helpers/globalRequest';
+import { getCards } from './helpers/globalRequest';
 import AppContext from './helpers/context';
 
 function App() {
-  const [images, setImages] = useState([]);
+  const [cards, setCards] = useState([]);
 
   useEffect(() => {
-    getImages()
-      .then((imageArr) => {
-        setImages(imageArr);
+    getCards()
+      .then((postArr) => {
+        setCards(postArr);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -24,7 +24,7 @@ function App() {
     <AppContext.Provider value={{ }}>
       <Navigation />
       <Container maxWidth="lg">
-        <Home images={images} />
+        <Home cards={cards} />
       </Container>
     </AppContext.Provider>
   );

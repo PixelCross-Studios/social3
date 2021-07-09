@@ -75,8 +75,9 @@ export default function ArtSection({ imageUrl }) {
 
           const aspectRatio = imageWidth / imageHeight;
           const largerValue = aspectRatio > 1.75 ? imageWidth : imageHeight;
-          camera.position.setZ(largerValue * 1.5);
+          camera.position.setZ(largerValue * 1.1);
         })
+        // eslint-disable-next-line no-console
         .catch((err) => console.error(err));
     };
 
@@ -96,7 +97,7 @@ export default function ArtSection({ imageUrl }) {
     // scene.add(axesHelper);
 
     const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableZoom = true;
+    controls.enableZoom = false;
     controls.enablePan = false;
     controls.enableDamping = true;
     controls.dampingFactor = 0.1;

@@ -1,35 +1,20 @@
 import React from 'react';
 
 import {
-  Grid, Typography, TextField, IconButton, Container
+  Grid
 } from '@material-ui/core';
-
-import SearchIcon from '@material-ui/icons/Search';
 
 export default function Navigation() {
   return (
-    <Container style={{ padding: 0 }}>
-      <Grid
-        container
-        alignItems="center"
-        justify="space-between"
-        style={{
-          backgroundColor: 'navy', height: 80, padding: 10, margin: 0
-        }}
-      >
-        <Typography variant="h3" style={{ color: 'white' }}>SOCIAL 3</Typography>
-        <Grid item>
-          <Grid container direction="row" alignItems="center">
-            <TextField style={{ color: 'white' }} />
-            <IconButton aria-label="search">
-              <SearchIcon />
-            </IconButton>
-          </Grid>
-        </Grid>
-      </Grid>
-      <Grid container style={{ height: 40 }} justify="center" alignItems="baseline">
-        <Typography variant="subtitle2">Important information</Typography>
-      </Grid>
-    </Container>
+    <Grid
+      container
+      alignItems="center"
+      justify="space-between"
+      style={{
+        backgroundColor: '#8595da', borderBottom: '2px solid #4a62c8', height: 80, padding: '10px 30px', margin: 0
+      }}
+    >
+      <img src="assets/Social3LogoSmall.png" alt="logo" />
+    </Grid>
   );
 }
