@@ -35,7 +35,7 @@ export default function Card({ card }) {
 
   return (
     <Container style={{ padding: 0, margin: '10px 0px 100px 0px' }}>
-      <Container style={{ padding: '5px 3px', border: '1px solid #555' }}>
+      <Container style={{ padding: '5px 3px', borderRadius: '5px 5px 0px 0px', border: '1px solid #555' }}>
         <ArtSection imageUrl={card.image} />
         <Grid container justify="space-between" style={{ padding: '5px 0px', borderBottom: '1px solid #444' }}>
           <Grid item>
