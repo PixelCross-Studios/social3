@@ -1,7 +1,12 @@
 /* eslint-disable no-console */
 const mongoose = require('mongoose');
 
-const mongoURI = 'mongodb://localhost:27017/social3';
+if (process.env.NODE_ENV !== 'testing') {
+  // eslint-disable-next-line global-require
+  require('dotenv').config();
+}
+
+const mongoURI = process.env.DATABASE_URI;
 
 const db = mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
 
